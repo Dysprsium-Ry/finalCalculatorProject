@@ -12,7 +12,7 @@ namespace MyCalculator
         string opertr;
         bool AutoCompu;
         bool isOpertrClick;
-        bool btnComputeIsClick;
+        bool btnNumClick;
 
 
         private bool dragging = false;
@@ -74,10 +74,22 @@ namespace MyCalculator
 
             foreach (char c in txtDisplay.Text)
             {
+                if (btnNumClick == true)
+                {
+                    if (num2 != 0)
+                    {
+                        num1 = result;
+                        num2 = decimal.Parse(txtDisplay.Text);
+                        txtDisplay.Clear();
+                    }
+                }
+                btnNumClick = false;
+
                 if (txtDisplay.Text == "0" || !char.IsDigit(c) && c != '.')
                     txtDisplay.Clear();
                 btnCompute.Focus();
                 break;
+
             }
 
             if (isOpertrClick)
@@ -96,21 +108,21 @@ namespace MyCalculator
 
             if (AutoCompu)
             {
+                btnNumClick = true;
                 num2 = decimal.Parse(txtDisplay.Text);
                 result = Compute(num1, num2, opertr);
                 opertr = button.Text;
                 result = Math.Abs(result);
-
 
                 //txtDisplay.Text = result.ToString();
                 //txtPreview.Text = $"{result} {opertr}";
 
                 //num1 = result;
                 txtDisplay.Text = result % 1 == 0 ? result.ToString("#,###0") : result.ToString("#,##0.##########");
-                txtPreview.Text = $"{FormatNumber(result)} {opertr}";
+                txtPreview.Text = $"{FormatNumber(num1)} {opertr} ";
                 isOpertrClick = true;
-                UpdateDisplay();
-                AutoCompu = false;
+                //UpdateDisplay();
+                //AutoCompu = false;
                 btnCompute.Focus();
                 return;
             }
@@ -229,27 +241,13 @@ namespace MyCalculator
 
         private void btnCompute_Click(object sender, EventArgs e)
         {
-            decimal.TryParse(txtDisplay.Text, out result);
-            if (num2 != 0)
-            {
-                do
-                {
-                    result = 0;
-                    result = Compute(num1, num2, opertr);
-
-                    decimal.TryParse(txtDisplay.Text, out num1);
-                    btnCompute.Focus();
-                }
-                while (btnComputeIsClick == true); btnCompute.Focus();
-            }
-
+            btnNumClick = true;
             if (num2 == 0)
             {
                 if (decimal.TryParse(txtDisplay.Text, out num2))
                 {
                     num2 = decimal.Parse(txtDisplay.Text);
                     result = Compute(num1, num2, opertr);
-                    btnCompute.Focus();
 
                     if (!(num1 == 0 && num2 == 0))
                     {
@@ -258,21 +256,25 @@ namespace MyCalculator
 
                         txtDisplay.Text = result % 1 == 0 ? result.ToString("#,##0") : result.ToString("#,##0.##########");
                         btnCompute.Focus();
-
-                        if (num2 != 0)
-                        {
-                            decimal.TryParse(txtDisplay.Text, out num1);
-                        }
                     }
                     else txtPreview.Text = "0"; btnCompute.Focus();
                 }
             }
-            else if (txtDisplay.Text == "0")
+            else
             {
-                txtPreview.Text = FormatNumber(num1) + opertr;
-                btnCompute.Focus();
+                num1 = decimal.Parse(txtDisplay.Text);
+                result = Compute(num1, num2, opertr);
+
+                if (!(num1 == 0 && num2 == 0))
+                {
+                    txtDisplay.Text = result.ToString();
+                    txtPreview.Text = $"{FormatNumber(num1)} {opertr} {FormatNumber(num2)} = ";
+
+                    txtDisplay.Text = result % 1 == 0 ? result.ToString("#,##0") : result.ToString("#,##0.##########");
+                    btnCompute.Focus();
+                }
+                else txtPreview.Text = "0"; btnCompute.Focus();
             }
-            else ClearAfter(); btnCompute.Focus();
         }
 
         private void txtPreview_TextChanged(object sender, EventArgs e)
@@ -287,14 +289,13 @@ namespace MyCalculator
             //    txtPreview.TextChanged += txtPreview_TextChanged;
             //}
 
-
-            if (decimal.TryParse(txtPreview.Text.Replace(",", ""), out decimal number))
-            {
-                txtPreview.TextChanged -= txtPreview_TextChanged; // Temporarily remove handler
-                txtPreview.Text = number > 1_000_000 ? FormatScientificNotation(number) : FormatNumber(number); // Switch format based on threshold
-                txtPreview.SelectionStart = txtPreview.Text.Length; // Set cursor to the end
-                txtPreview.TextChanged += txtPreview_TextChanged; // Reattach handler
-            }
+            //if (decimal.TryParse(txtPreview.Text.Replace(",", ""), out decimal number))
+            //{
+            //    txtPreview.TextChanged -= txtPreview_TextChanged; // Temporarily remove handler
+            //    txtPreview.Text = number > 1_000_000 ? FormatScientificNotation(number) : FormatNumber(number); // Switch format based on threshold
+            //    txtPreview.SelectionStart = txtPreview.Text.Length; // Set cursor to the end
+            //    txtPreview.TextChanged += txtPreview_TextChanged; // Reattach handler
+            //}
         }
 
         private void btnClose_Click(object sender, EventArgs e)
@@ -406,8 +407,8 @@ namespace MyCalculator
         #region Private Methods
         private void AdjustFontSize(TextBox textBox)
         {
-            int minFontSize = 27;  // Define the minimum font size
-            int maxFontSize = 36; // Define the maximum font size
+            int minFontSize = 31;  // Define the minimum font size
+            int maxFontSize = 34; // Define the maximum font size
             int currentFontSize = maxFontSize;
 
             // Set initial font size to the maximum
@@ -453,7 +454,7 @@ namespace MyCalculator
             string formattedNum2 = num2 != 0 ? FormatNumber(num2) : string.Empty;
             //string formattedResult = result != 0 ? FormatNumber(result) : txtDisplay.Text = "0";
             //Debug.WriteLine($"num1: {formattedNum1}, num2: {formattedNum2}, opertr: {opertr}");
-            txtPreview.Text = $"{formattedNum1} {opertr} {formattedNum2}";
+            //txtPreview.Text = $"{formattedNum1} {opertr} {formattedNum2}";
             if (string.IsNullOrEmpty(opertr))
             {
                 txtPreview.Text = $"{formattedNum1}";

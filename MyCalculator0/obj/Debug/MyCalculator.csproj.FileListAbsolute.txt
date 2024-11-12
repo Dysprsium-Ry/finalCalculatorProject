@@ -18,3 +18,7 @@ C:\Users\Move Foundation\source\repos\WindowsFormsApp2\MyCalculator0\obj\Debug\M
 C:\Users\Move Foundation\source\repos\WindowsFormsApp2\MyCalculator0\obj\Debug\MyCalculator.exe
 C:\Users\Move Foundation\source\repos\WindowsFormsApp2\MyCalculator0\obj\Debug\MyCalculator.pdb
 C:\Users\Move Foundation\source\repos\WindowsFormsApp2\MyCalculator0\obj\Debug\MyCalculator.YozoCalculator.resources
+C:\Users\Move Foundation\source\repos\WindowsFormsApp2\MyCalculator0\bin\Debug\MyCalculator.exe.manifest
+C:\Users\Move Foundation\source\repos\WindowsFormsApp2\MyCalculator0\bin\Debug\MyCalculator.application
+C:\Users\Move Foundation\source\repos\WindowsFormsApp2\MyCalculator0\obj\Debug\MyCalculator.exe.manifest
+C:\Users\Move Foundation\source\repos\WindowsFormsApp2\MyCalculator0\obj\Debug\MyCalculator.application
